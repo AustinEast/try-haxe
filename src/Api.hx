@@ -1,10 +1,10 @@
+import api.Program.ProgramV2;
 import haxe.io.Path;
 import haxe.remoting.Context;
 import haxe.web.Dispatch;
 import php.Lib;
 import sys.FileSystem;
 import sys.io.File;
-import api.Program.ProgramV2;
 import template.Templates;
 
 class Api {
@@ -26,6 +26,11 @@ class Api {
 		var alphaNum = ~/[^a-zA-Z0-9]/;
 		if (alphaNum.match(s))
 			throw 'Unauthorized identifier : $s';
+	}
+
+	public static function checkNullSafety(s:String) {
+		if (s != "Off" && s != "Loose" && s != "Strict" && s != "StrictThreaded")
+			throw 'Invalid null safety : $s';
 	}
 
 	public static function checkDCE(s:String) {
@@ -93,6 +98,12 @@ class Api {
 		} else {
 			checkSanity(main);
 		}
+		var nullSafety = d.params.get('nullSafety');
+		if (nullSafety == null) {
+			nullSafety = "Off";
+		} else {
+			checkNullSafety(nullSafety);
+		}
 		var dce = d.params.get('dce');
 		if (dce == null) {
 			dce = "full";
@@ -127,6 +138,7 @@ class Api {
 						},
 					],
 					haxeVersion: Haxe_4_1_5,
+					nullSafety: nullSafety,
 					dce: dce,
 					analyzer: analyzer,
 					target: JS("test", ES6),

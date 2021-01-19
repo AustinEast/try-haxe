@@ -51,6 +51,7 @@ class Editor {
 	var targets:JQuery;
 	var jsVersion:JQuery;
 	var mainName:JQuery;
+	var nullSafetyName:JQuery;
 	var dceName:JQuery;
 	var analyzerName:JQuery;
 	var haxeVersion:JQuery;
@@ -141,6 +142,7 @@ class Editor {
 		compilerTimes = new JQuery("#compiler-times");
 		embedPreview = new JQuery("#embed-preview");
 		mainName = new JQuery("#hx-options-form input[name='main']");
+		nullSafetyName = new JQuery("#hx-options-form .hx-null-safety");
 		dceName = new JQuery("#hx-options-form .hx-dce-name");
 		analyzerName = new JQuery("#hx-options-form .hx-analyzer-name");
 		haxeVersion = new JQuery("#hx-options-form .hx-haxe-ver");
@@ -171,6 +173,7 @@ class Editor {
 			embedSource.refresh();
 		});
 
+		nullSafetyName.on("change", "input[name='null-safety']", onNullSafety);
 		dceName.on("change", "input[name='dce']", onDce);
 		analyzerName.on("change", "input[name='analyzer']", onAnalyzer);
 		targets.on("change", "input[name='target']", onTarget);
@@ -191,6 +194,7 @@ class Editor {
 				for (src in haxeEditors)
 					{name: src.nameElement.val(), source: src.codeMirror.getValue()}
 			],
+			nullSafety: "Off",
 			dce: "full",
 			analyzer: "yes",
 			haxeVersion: Haxe_4_1_5,
@@ -365,6 +369,22 @@ class Editor {
 		new JQuery('#hx-about').height(h + 10);
 	}
 
+	function onNullSafety(e:Event) {
+		var cb = new JQuery(e.target);
+		var name = cb.val();
+		switch (name) {
+			case "Off", "Loose", "Strict", "StrictThreaded":
+				setNullSafety(name);
+			default:
+		}
+	}
+
+	function setNullSafety(safety:String) {
+		program.nullSafety = safety;
+		var radio = new JQuery('input[name=\'null-safety"\'][value=\'$safety\']');
+		radio.attr("checked", "checked");
+	}
+
 	function onDce(e:Event) {
 		var cb = new JQuery(e.target);
 		var name = cb.val();
@@ -537,6 +557,7 @@ class Editor {
 				haxeEditors[i].codeMirror.setValue(program.modules[i].source);
 			}
 
+			setNullSafety(program.nullSafety);
 			setTarget(program.target);
 			setDCE(program.dce);
 			setAnalyzer(program.analyzer);
@@ -703,6 +724,7 @@ class Editor {
 			program.modules[i].source = haxeEditors[i].codeMirror.getValue();
 		}
 		program.mainClass = mainName.val();
+		program.nullSafety = new JQuery('input[name=\'null-safety\']:checked').val();
 		program.dce = new JQuery('input[name=\'dce\']:checked').val();
 		program.analyzer = new JQuery('input[name=\'analyzer\']:checked').val();
 

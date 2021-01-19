@@ -18,6 +18,7 @@ typedef ProgramV2 = {
 	target:TargetV2,
 	haxeVersion:HaxeVersion,
 	libs:Array<String>,
+	nullSafety:String,
 	dce:String,
 	analyzer:String,
 }

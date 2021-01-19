@@ -69,6 +69,7 @@ class Compiler {
 
 		Api.checkSanity(program.uid);
 		Api.checkSanity(program.mainClass);
+		Api.checkNullSafety(program.nullSafety);
 		Api.checkDCE(program.dce);
 
 		programFolder = Path.join([Api.programsRootFolder, program.uid]);
@@ -142,6 +143,7 @@ class Compiler {
 					target: old.target,
 					libs: old.libs,
 					haxeVersion: null,
+					nullSafety: "Off",
 					dce: old.dce,
 					analyzer: old.analyzer,
 					modules: [
@@ -333,6 +335,9 @@ class Compiler {
 			"-dce",
 			program.dce
 		];
+		if (program.nullSafety != "Off") {
+			args.push("--macro nullSafety\\(\\'\\'," + program.nullSafety + "\\)");
+		}
 
 		if (program.analyzer == "yes")
 			args = args.concat(["-D", "analyzer-optimize", "-D", "analyzer"]);

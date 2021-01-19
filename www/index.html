@@ -182,10 +182,7 @@ class Macro {
                   <div class="control-group hx-haxe-ver">
                     <label class="control-label" for="haxe-ver-dropdown">Haxe version</label>
                     <div class="controls">
-                      <select>
-                        <option value="3.3.0-rc.1">3.3.0-rc.1</option>
-                        <option value="3.2.1">3.2.1</option>
-                      </select>
+                      <select></select>
                     </div>
                   </div>
                   <div class="control-group hx-targets">
@@ -206,6 +203,18 @@ class Macro {
 
                       <label class="radio inline"><input type="radio" name="js-es" value="ES5"></input> ES5</label>
                       <label class="radio inline"><input type="radio" name="js-es" value="ES6" checked></input> ES6</label>
+
+                    </div>
+                  </div>
+
+                  <div class="control-group hx-null-safety">
+                    <label class="control-label" for="main-class">Null Safety <a href="https://haxe.org/manual/cr-null-safety.html" target="_blank"><i class="fa fa-question-circle"></i></a></label>
+                    <div class="controls">
+
+                      <label class="radio inline"><input type="radio" name="null-safety" value="Off" checked></input> Off</label>
+                      <label class="radio inline"><input type="radio" name="null-safety" value="Loose" ></input> Loose</label>
+                      <label class="radio inline"><input type="radio" name="null-safety" value="Strict"></input> Strict</label>
+                      <label class="radio inline"><input type="radio" name="null-safety" value="StrictThreaded"></input> StrictThreaded</label>
 
                     </div>
                   </div>
